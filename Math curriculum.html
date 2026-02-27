@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8th Grade Mathematics — Curriculum Guide</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --card-bg: #ffffff;
+    --primary: #2c4a7c;
+    --primary-light: #3a5f9e;
+    --accent: #e8902a;
+    --text: #1a1a2e;
+    --muted: #6b7a99;
+    --border: #e0e6f0;
+    --tag-bg: #eef2ff;
+    --tag-text: #3a5f9e;
+    --progress-bg: #dde3f0;
+    --shadow: 0 2px 12px rgba(44,74,124,0.10);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 28px 24px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(44,74,124,0.25);
+  }
+  header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.3px; }
+  header p { font-size: 0.82rem; opacity: 0.8; margin-top: 3px; }
+  .header-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* ---- SEARCH/FILTER BAR ---- */
+  .toolbar {
+    background: white;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--primary); }
+  .domain-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1.5px solid transparent;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* ---- MAIN LAYOUT ---- */
+  main { padding: 20px 16px 40px; max-width: 900px; margin: 0 auto; }
+
+  /* ---- DOMAIN SECTION ---- */
+  .domain-section {
+    margin-bottom: 36px;
+  }
+  .domain-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    cursor: pointer;
+  }
+  .domain-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 6px;
+    padding: 3px 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .domain-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    flex: 1;
+  }
+  .domain-count {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .domain-chevron {
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: transform 0.25s;
+  }
+  .domain-section.collapsed .domain-chevron { transform: rotate(-90deg); }
+  .domain-lessons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .domain-section.collapsed .domain-lessons { display: none; }
+
+  /* ---- LESSON CARD ---- */
+  .lesson-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .lesson-card:hover { box-shadow: 0 6px 24px rgba(44,74,124,0.16); transform: translateY(-1px); }
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .lesson-num {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .lesson-info { flex: 1; }
+  .lesson-title { font-weight: 600; font-size: 0.95rem; line-height: 1.3; }
+  .lesson-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .card-count {
+    font-size: 0.74rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-count::before { content: '🃏'; }
+  .lesson-chevron {
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .lesson-card.open .lesson-chevron { transform: rotate(90deg); }
+
+  /* ---- PROGRESS BAR ---- */
+  .progress-bar {
+    height: 3px;
+    background: var(--progress-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+    transition: width 0.4s ease;
+  }
+
+  /* ---- CARDS PANEL ---- */
+  .cards-panel { display: none; }
+  .lesson-card.open .cards-panel { display: block; }
+
+  .card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-top: 1px solid var(--border);
+    background: #fafbfd;
+  }
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-dot.active { background: var(--primary); transform: scale(1.2); }
+  .nav-dot.visited { background: var(--accent); }
+  .nav-arrows { display: flex; gap: 8px; }
+  .nav-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .nav-btn:hover { background: var(--primary-light); }
+  .nav-btn:disabled { background: var(--border); cursor: default; }
+
+  /* ---- CARD CONTENT ---- */
+  .card-content {
+    padding: 20px 20px 16px;
+    min-height: 160px;
+    border-top: 1px solid var(--border);
+  }
+  .card-tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 5px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .card-headline {
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    line-height: 1.35;
+  }
+  .card-body {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: #333;
+  }
+  .card-body strong { color: var(--primary); }
+  .card-body ul {
+    margin: 8px 0 8px 18px;
+  }
+  .card-body ul li { margin-bottom: 4px; }
+  .card-body .highlight {
+    background: #fff8ed;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 0.84rem;
+  }
+  .card-index {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  /* ---- DOMAIN COLORS ---- */
+  .u1 .lesson-num, .u1 .domain-badge { background: #2c4a7c; }
+  .u2 .lesson-num, .u2 .domain-badge { background: #7b3a87; }
+  .u3 .lesson-num, .u3 .domain-badge { background: #2a7b5e; }
+  .u4 .lesson-num, .u4 .domain-badge { background: #c05a1a; }
+  .u5 .lesson-num, .u5 .domain-badge { background: #1e6b8a; }
+  .u6 .lesson-num, .u6 .domain-badge { background: #5a6b2a; }
+
+  .u1 .domain-title { color: #2c4a7c; }
+  .u2 .domain-title { color: #7b3a87; }
+  .u3 .domain-title { color: #2a7b5e; }
+  .u4 .domain-title { color: #c05a1a; }
+  .u5 .domain-title { color: #1e6b8a; }
+  .u6 .domain-title { color: #5a6b2a; }
+
+  /* hidden class */
+  .hidden { display: none !important; }
+
+  /* ---- COMPLETION BADGE ---- */
+  .complete-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.1rem; }
+    .lesson-title { font-size: 0.88rem; }
+  }
+
+  .card-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+  .card-body th, .card-body td {
+    border: 1px solid var(--border);
+    padding: 8px;
+    text-align: left;
+  }
+  .card-body th {
+    background: var(--tag-bg);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📐 8th Grade Mathematics — Curriculum Guide</h1>
+  <p>Common Core State Standards Aligned · Full Academic Year</p>
+  <div class="header-meta">
+    <span class="stat-pill">6 Units</span>
+    <span class="stat-pill" id="total-lessons-pill">100 Lessons</span>
+    <span class="stat-pill" id="total-cards-pill">~60 Cards</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input class="search-input" type="text" placeholder="🔍 Search units..." id="searchInput" />
+  <div class="domain-filter">
+    <button class="filter-btn active" onclick="filterDomain('all', this)">All</button>
+    <button class="filter-btn" onclick="filterDomain('u1', this)">U1: Real Number System</button>
+    <button class="filter-btn" onclick="filterDomain('u2', this)">U2: Expressions & Equations</button>
+    <button class="filter-btn" onclick="filterDomain('u3', this)">U3: Functions</button>
+    <button class="filter-btn" onclick="filterDomain('u4', this)">U4: Geometry</button>
+    <button class="filter-btn" onclick="filterDomain('u5', this)">U5: Statistics & Probability</button>
+    <button class="filter-btn" onclick="filterDomain('u6', this)">U6: Review & Problem Solving</button>
+  </div>
+</div>
+
+<main id="main-content">
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 1: THE REAL NUMBER SYSTEM -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u1" data-domain="u1">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 1</span>
+    <span class="domain-title">The Real Number System (15 Lessons)</span>
+    <span class="domain-count">10 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 1.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u1" data-domain="u1" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">1.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">10 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 10 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            Students build and extend their understanding of the real number system — distinguishing rational from irrational numbers, working fluently with integer exponents, and expressing extreme quantities using scientific notation. This unit develops the number sense that underpins all of algebra and provides students with tools used in science, engineering, finance, and everyday life.
+          </div>
+          <div class="card-index">Card 1 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 10 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>Why can't every number be written as a fraction? What makes a number irrational?</li>
+              <li>How do exponents allow us to express patterns and extreme quantities efficiently?</li>
+              <li>Why do scientists use scientific notation, and how does it make calculations manageable?</li>
+              <li>How are square roots and cube roots connected to area and volume?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 10 · CCSS Standards</span>
+          <div class="card-headline">CCSS Standards</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Standard</th><th>Description</th></tr>
+              <tr><td>8.NS.A.1</td><td>Know that numbers that are not rational are called irrational. Understand informally that every number has a decimal expansion; for rational numbers show that the decimal expansion repeats eventually, and convert a decimal expansion which repeats eventually into a rational number.</td></tr>
+              <tr><td>8.NS.A.2</td><td>Use rational approximations of irrational numbers to compare the size of irrational numbers, locate them approximately on a number line diagram, and estimate the value of expressions (e.g., π²).</td></tr>
+              <tr><td>8.EE.A.1</td><td>Know and apply the properties of integer exponents to generate equivalent numerical expressions. For example, 3² × 3⁻⁵ = 3⁻³ = 1/27.</td></tr>
+              <tr><td>8.EE.A.2</td><td>Use square root and cube root symbols to represent solutions to equations of the form x² = p and x³ = p, where p is a positive rational number. Evaluate square roots of small perfect squares and cube roots of small perfect cubes.</td></tr>
+              <tr><td>8.EE.A.3</td><td>Use numbers expressed in the form of a single digit times an integer power of 10 to estimate very large or very small quantities, and to express how many times as much one is than the other.</td></tr>
+              <tr><td>8.EE.A.4</td><td>Perform operations with numbers expressed in scientific notation, including problems where both decimal and scientific notation are used. Use scientific notation and choose units of appropriate size for measurements of very large or very small quantities. Interpret scientific notation that has been generated by technology.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 10 · Learning Objectives</span>
+          <div class="card-headline">Learning Objectives</div>
+          <div class="card-body">
+            By the end of Unit 1, students will be able to:
+            <ol>
+              <li>Classify any real number as rational or irrational, providing justification</li>
+              <li>Explain why the decimal expansion of a rational number repeats or terminates</li>
+              <li>Locate irrational numbers on a number line to the nearest tenth using rational approximations</li>
+              <li>Apply all seven properties of integer exponents to simplify expressions</li>
+              <li>Evaluate and estimate square roots and cube roots with and without a calculator</li>
+              <li>Solve equations of the form x² = p and x³ = p</li>
+              <li>Convert fluently between standard notation and scientific notation</li>
+              <li>Perform multiplication, division, addition, and subtraction in scientific notation</li>
+              <li>Apply scientific notation to real-world measurement and estimation problems</li>
+            </ol>
+          </div>
+          <div class="card-index">Card 4 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 10 · YouTube Video Resources</span>
+          <div class="card-headline">YouTube Video Resources</div>
+          <div class="card-body">
+            <ul>
+              <li>🔢 Rational vs. Irrational Numbers Explained — Khan Academy — Clear visual introduction; includes number line practice (8 min)</li>
+              <li>🌌 Scientific Notation in Space — Math Antics — Uses astronomy and space context students love (10 min)</li>
+              <li>🧠 Exponent Rules — All 7 Properties — The Organic Chemistry Tutor — Comprehensive, worked examples, great for notes (15 min)</li>
+              <li>🎵 Square Roots Song — NUMBEROCK — Catchy and memorable — perfect bell-ringer before a quiz (3 min)</li>
+              <li>🚀 NASA Powers of 10 — Classic Eames Film — Zooms from quarks to galaxy clusters — mind-expanding hook (9 min)</li>
+              <li>📏 Approximating Irrational Numbers on Number Line — Khan Academy — Step-by-step process for 8.NS.A.2 — very clearly explained (6 min)</li>
+              <li>📈 Negative Exponents Explained Visually — TED-Ed — Intuitive animated explanation of negative exponents (5 min)</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 5 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 10 · STAR Project</span>
+          <div class="card-headline">THE COSMIC SCALE CHALLENGE</div>
+          <div class="card-body">
+            Students choose a scientific topic (atoms and molecules, the solar system, viruses and bacteria, national debt, deep ocean, computer storage) and create an illustrated "Scale Book" using scientific notation. They express 10+ real measurements, calculate ratios between quantities, place all values on a relative number line, and present findings to the class with their most surprising discovery.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.NS.A.2, 8.EE.A.3, 8.EE.A.4<br>
+              <strong>Duration:</strong> 4 class periods + 1 homework night for research<br>
+              <strong>Materials:</strong> ruler, colored pencils/markers, internet research access<br>
+              <strong>Optional digital tool:</strong> Google Slides or Canva for visual design<br>
+              <strong>Presentation:</strong> 3-minute class share with one 'mind-blowing fact' required<br>
+              <strong>Extension:</strong> calculate how many times larger one quantity is than another using quotients in scientific notation
+            </div>
+            <strong>Project Rubric — 4 Categories (25 pts each = 100 pts)</strong><br>
+            Mathematical Accuracy (all scientific notation correct, calculations verified) | Organization & Completeness (10+ measurements, number line, sources cited) | Visual Presentation (clear, labeled, creative) | Oral Presentation (explains one surprising finding clearly, answers one audience question)
+          </div>
+          <div class="card-index">Card 6 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 10 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (15 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1–2</td><td>Rational & Irrational Numbers</td><td>Definitions, decimal expansions, converting repeating decimals; Real Number System diagram</td><td>Number sort (rational/irrational), decimal investigation with calculators</td></tr>
+              <tr><td>3</td><td>Irrational Numbers on Number Line</td><td>Approximating √2, √3, π to nearest tenth; comparing irrational numbers</td><td>Number line activity; estimate and check with calculator</td></tr>
+              <tr><td>4–5</td><td>Square Roots & Cube Roots</td><td>Perfect squares/cubes, estimating between integers, solving x²=p and x³=p</td><td>Root war card game; Kahoot! on perfect squares/cubes</td></tr>
+              <tr><td>6–9</td><td>Properties of Integer Exponents</td><td>Zero exponent, negative exponents, product/quotient/power rules; equivalent expressions</td><td>Exponent rule foldable; matching activity; error analysis</td></tr>
+              <tr><td>10–12</td><td>Scientific Notation</td><td>Converting to/from standard form; ordering in scientific notation; calculator notation (E)</td><td>NASA video hook; measurement comparison sort</td></tr>
+              <tr><td>13–14</td><td>Operations in Scientific Notation</td><td>Multiply, divide, add, subtract in sci. notation; real-world problem solving</td><td>Cosmic Scale Project work sessions; partner peer review</td></tr>
+              <tr><td>15</td><td>Unit Assessment + Presentations</td><td>Review and synthesis of all Unit 1 standards</td><td>Unit test; Cosmic Scale project presentations</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 7 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 10 · Key Vocabulary</span>
+          <div class="card-headline">Key Vocabulary</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Term</th><th>Definition</th></tr>
+              <tr><td>Rational number</td><td>Any number that can be written as a fraction p/q where p and q are integers and q ≠ 0; decimal terminates or repeats</td></tr>
+              <tr><td>Irrational number</td><td>A real number that cannot be written as a fraction; decimal expansion is non-terminating and non-repeating (e.g., π, √2)</td></tr>
+              <tr><td>Integer exponent</td><td>An exponent that is a whole number, zero, or negative integer</td></tr>
+              <tr><td>Scientific notation</td><td>A number written as a × 10ⁿ where 1 ≤ a < 10 and n is an integer</td></tr>
+              <tr><td>Square root</td><td>A value that, when multiplied by itself, gives the original number; √p is the positive square root of p</td></tr>
+              <tr><td>Cube root</td><td>A value that, when multiplied by itself three times, gives the original number; ³√p</td></tr>
+              <tr><td>Perfect square</td><td>The product of an integer multiplied by itself: 1, 4, 9, 16, 25, 36 ...</td></tr>
+              <tr><td>Perfect cube</td><td>The product of an integer multiplied by itself three times: 1, 8, 27, 64, 125 ...</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 8 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 10 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Support strategies:
+            <ul>
+              <li>Post a Real Number System nested set diagram as a permanent anchor chart</li>
+              <li>Provide a perfect squares/cubes reference card (1² through 15², 1³ through 10³) for struggling students</li>
+              <li>Use colored sticky notes for number sorting on a physical class number line</li>
+              <li>Scaffold scientific notation with a step-by-step conversion graphic organizer</li>
+              <li>Extension: research and present a proof that √2 is irrational; investigate transcendental numbers (π, e)</li>
+              <li>Extension: explore Zeno's Paradox and its connection to infinite decimal expansions</li>
+              <li>ELL support: pre-teach rational/irrational, exponent, coefficient, notation; word wall with visuals</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 9 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 10 of 10 · Real-World Connections</span>
+          <div class="card-headline">Real-World Connections</div>
+          <div class="card-body">
+            Where students encounter these ideas outside the classroom:
+            <ul>
+              <li>Scientific notation: astronomy (light-years), biology (cell/virus sizes), economics (national debt, GDP), chemistry (molar mass)</li>
+              <li>Irrational numbers: geometry (diagonal of a square), music (equal temperament tuning), fractals</li>
+              <li>Exponent rules: compound interest formulas, population growth models, radioactive decay</li>
+              <li>Square roots: construction (Pythagorean Theorem), physics (kinetic energy formulas)</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 10 / 10</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 2: EXPRESSIONS & EQUATIONS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u2" data-domain="u2">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 2</span>
+    <span class="domain-title">Expressions & Equations (20 Lessons)</span>
+    <span class="domain-count">10 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 2.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u2" data-domain="u2" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">2.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">10 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 10 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            This is the algebraic heart of 8th grade mathematics. Students develop deep fluency with linear equations in one and two variables, moving from proportional relationships and slope to slope-intercept form and ultimately to systems of equations. Every concept is grounded in real-world contexts — pricing comparisons, motion problems, business scenarios — so students experience algebra as a powerful tool, not an abstract manipulation.
+          </div>
+          <div class="card-index">Card 1 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 10 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>How does slope describe the relationship between two quantities changing together?</li>
+              <li>How can we use an equation to model a real-world linear relationship?</li>
+              <li>When two things change simultaneously, how do we find the point where they intersect?</li>
+              <li>What does it mean for a linear equation to have one solution, no solution, or infinitely many?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 10 · CCSS Standards</span>
+          <div class="card-headline">CCSS Standards</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Standard</th><th>Description</th></tr>
+              <tr><td>8.EE.B.5</td><td>Graph proportional relationships, interpreting the unit rate as the slope of the graph. Compare two different proportional relationships represented in different ways.</td></tr>
+              <tr><td>8.EE.B.6</td><td>Use similar triangles to explain why the slope m is the same between any two distinct points on a non-vertical line in the coordinate plane; derive y = mx + b.</td></tr>
+              <tr><td>8.EE.C.7a</td><td>Give examples of linear equations in one variable with one solution, infinitely many solutions, or no solutions. Show which of these possibilities is the case by successively transforming the given equation into simpler forms.</td></tr>
+              <tr><td>8.EE.C.7b</td><td>Solve linear equations with rational number coefficients, including equations whose solutions require expanding expressions using the distributive property and collecting like terms.</td></tr>
+              <tr><td>8.EE.C.8a</td><td>Understand that solutions to a system of two linear equations in two variables correspond to points of intersection of their graphs, and the point corresponds to the pair of values that makes both equations true.</td></tr>
+              <tr><td>8.EE.C.8b</td><td>Solve systems of two linear equations in two variables algebraically, and estimate solutions by graphing the equations. Solve simple cases by inspection.</td></tr>
+              <tr><td>8.EE.C.8c</td><td>Solve real-world and mathematical problems leading to two linear equations in two variables.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 10 · Learning Objectives</span>
+          <div class="card-headline">Learning Objectives</div>
+          <div class="card-body">
+            By the end of Unit 2, students will be able to:
+            <ol start="10">
+              <li>Graph and compare proportional relationships, identifying slope as the unit rate</li>
+              <li>Calculate slope between any two points using rise/run and explain using similar triangles</li>
+              <li>Write and graph linear equations in slope-intercept form y = mx + b</li>
+              <li>Identify and create equations with one solution, no solution, or infinitely many solutions</li>
+              <li>Solve multi-step linear equations involving distributive property and combining like terms</li>
+              <li>Determine the solution of a system by graphing both equations and identifying the intersection</li>
+              <li>Solve systems algebraically using substitution and elimination methods</li>
+              <li>Write and solve systems of equations to model real-world problems</li>
+            </ol>
+          </div>
+          <div class="card-index">Card 4 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 10 · YouTube Video Resources</span>
+          <div class="card-headline">YouTube Video Resources</div>
+          <div class="card-body">
+            <ul>
+              <li>📏 Understanding Slope: Rise Over Run — Khan Academy — Visual, intuitive approach with real graph examples (12 min)</li>
+              <li>🎯 Slope-Intercept Form Made Easy — Math Antics — Best intro to y = mx + b; engaging and clear (12 min)</li>
+              <li>🔁 Systems of Equations: 3 Methods — Professor Leonard — Graphing, substitution, and elimination with full examples (24 min)</li>
+              <li>🎮 Systems of Equations in Real Life — Mashup Math — Movie tickets, food, sports — fun relatable contexts (8 min)</li>
+              <li>♾️ No Solution vs. Infinite Solutions Explained — Virtual Nerd — Resolves a common student misconception clearly (6 min)</li>
+              <li>🛣️ Slope in the Real World: Roads and Ramps — Mathantics — Grade percentages, accessibility ramps, ski slopes (7 min)</li>
+              <li>💻 Desmos Tutorial: Graphing Systems — Desmos Team — How to use Desmos to verify systems solutions (5 min)</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 5 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 10 · STAR Project</span>
+          <div class="card-headline">THE BREAK-EVEN BUSINESS PLAN</div>
+          <div class="card-body">
+            Student teams create a fictional small business (food truck, app, clothing brand, bakery, etc.) and model it with mathematics. They write a cost equation (fixed costs + variable costs) and a revenue equation, graph both on the same coordinate plane, find the break-even point algebraically, and produce a professional 1-page Business Report explaining when their company becomes profitable.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.EE.B.5, 8.EE.C.8a, 8.EE.C.8b, 8.EE.C.8c<br>
+              <strong>Duration:</strong> 5 class periods (1 planning, 2 math work, 1 design, 1 presentation)<br>
+              <strong>Materials:</strong> graph paper, Desmos, optional: Canva for business report design<br>
+              <strong>Deliverables:</strong> graph showing both lines and labeled intersection, algebraic solution, written report<br>
+              <strong>Cross-curricular:</strong> entrepreneurship, economics, career readiness, writing<br>
+              <strong>Extension:</strong> add a third constraint (max production limit) and shade the feasible region<br>
+              <strong>Presentation format:</strong> 3-minute pitch to class as 'investors'
+            </div>
+          </div>
+          <div class="card-index">Card 6 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 10 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (20 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1–2</td><td>Proportional Relationships & Slope</td><td>Unit rate as slope; graphs through the origin; comparing two proportional relationships</td><td>Slope investigation with similar triangles; compare phone plan graphs</td></tr>
+              <tr><td>3–5</td><td>Slope-Intercept Form</td><td>y = mx + b; graphing from equation; writing equation from graph and table; interpreting b</td><td>Matching game: equations/graphs/tables; Desmos exploration</td></tr>
+              <tr><td>6–7</td><td>Writing Linear Equations</td><td>Writing equation from two points; from slope and a point; standard to slope-intercept form</td><td>Real-world scenarios; Polygraph: Lines on Desmos</td></tr>
+              <tr><td>8–10</td><td>Solving Linear Equations</td><td>Multi-step, distributive property, combining like terms, variables on both sides</td><td>Equation relay race; error analysis warm-ups</td></tr>
+              <tr><td>11–12</td><td>One/No/Infinite Solutions</td><td>Recognizing solution types algebraically; creating equations for each type</td><td>Investigation: what makes parallel lines? what makes the same line?</td></tr>
+              <tr><td>13–16</td><td>Systems of Equations</td><td>Graphing method; substitution; elimination; checking solutions; choosing a method</td><td>Desmos graphing systems; card sort: which method is best here?</td></tr>
+              <tr><td>17–19</td><td>Real-World Systems + Project</td><td>Writing systems from context; break-even problems; mixture problems; Business Plan project work</td><td>Break-Even Business Plan project sessions</td></tr>
+              <tr><td>20</td><td>Unit Assessment + Presentations</td><td>Synthesis and assessment of all Unit 2 standards</td><td>Unit test; Business Plan presentations</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 7 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 10 · Key Vocabulary</span>
+          <div class="card-headline">Key Vocabulary</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Term</th><th>Definition</th></tr>
+              <tr><td>Slope</td><td>Rate of change between two points on a line; rise ÷ run = (y₂-y₁)/(x₂-x₁); steepness and direction</td></tr>
+              <tr><td>Y-intercept</td><td>The point where the line crosses the y-axis; value of y when x = 0; the constant b in y = mx + b</td></tr>
+              <tr><td>Slope-intercept form</td><td>y = mx + b — the equation of a non-vertical line; m = slope, b = y-intercept</td></tr>
+              <tr><td>System of equations</td><td>Two or more equations with the same variables; a solution satisfies ALL equations simultaneously</td></tr>
+              <tr><td>Substitution method</td><td>Solving systems by isolating one variable in one equation and substituting into the other</td></tr>
+              <tr><td>Elimination method</td><td>Solving systems by adding or subtracting equations to eliminate one variable</td></tr>
+              <tr><td>No solution</td><td>System where lines are parallel; same slope, different y-intercept; 0 = nonzero (contradiction)</td></tr>
+              <tr><td>Infinite solutions</td><td>System where lines are identical; same slope, same y-intercept; equation simplifies to 0 = 0</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 8 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 10 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Support and extension strategies:
+            <ul>
+              <li>Provide a slope formula reference card; allow graphing calculator or Desmos for checking (not for first attempts)</li>
+              <li>Scaffold systems with a "Which method?" decision flowchart (graphing vs. substitution vs. elimination)</li>
+              <li>Use color-coding: highlight the slope in one color, y-intercept in another when writing equations</li>
+              <li>Extension: prove algebraically why parallel lines have no solution; explore 3-variable systems</li>
+              <li>Extension: research linear programming and the simplex method used in business optimization</li>
+              <li>Connection to science: constant speed motion d = rt; constant rate growth; temperature conversion</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 9 / 10</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 10 of 10 · Tech Integration</span>
+          <div class="card-headline">Tech Integration — Desmos Activities</div>
+          <div class="card-body">
+            Free, browser-based, Chromebook/iPad compatible. These activities transform slope and systems from abstract to interactive:
+            <ul>
+              <li>Marbleslides: Lines — students write equations to launch marbles through star targets (motivation level: extremely high)</li>
+              <li>Polygraph: Lines — Guess Who?-style game that builds slope/intercept academic vocabulary through play</li>
+              <li>Card Sort: Slope — connect graphs, equations, tables, and verbal descriptions of the same relationship</li>
+              <li>Systems of Equations Activity Builder — graph two lines and trace the intersection; instant feedback</li>
+              <li>Match My Line — students adjust equations to match target graphs; builds intuition for m and b</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 10 / 10</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 3: FUNCTIONS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u3" data-domain="u3">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 3</span>
+    <span class="domain-title">Functions (18 Lessons)</span>
+    <span class="domain-count">9 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 3.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u3" data-domain="u3" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">3.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">9 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 9 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            The functions unit is where algebra clicks. Students move beyond solving equations to understanding functions as input-output rules — mathematical machines that transform inputs into outputs consistently and predictably. They learn to recognize, compare, and represent functions using four interchangeable lenses: equations, tables, graphs, and verbal descriptions. This representational fluency is the conceptual engine of all of high school mathematics.
+          </div>
+          <div class="card-index">Card 1 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 9 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>What makes a relationship a function — and what breaks that rule?</li>
+              <li>How can the same function look completely different depending on how we represent it?</li>
+              <li>What can the shape of a graph tell us about the story of a situation?</li>
+              <li>How is a linear function different from a nonlinear one, and how can we tell them apart?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 9 · CCSS Standards</span>
+          <div class="card-headline">CCSS Standards</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Standard</th><th>Description</th></tr>
+              <tr><td>8.F.A.1</td><td>Understand that a function is a rule that assigns to each input exactly one output. The graph of a function is the set of ordered pairs consisting of an input and the corresponding output.</td></tr>
+              <tr><td>8.F.A.2</td><td>Compare properties of two functions each represented in a different way (algebraically, graphically, numerically in tables, or by verbal descriptions). For example, given a linear function represented by a table of values and a linear function represented by an algebraic expression, determine which function has the greater rate of change.</td></tr>
+              <tr><td>8.F.A.3</td><td>Interpret the equation y = mx + b as defining a linear function, whose graph is a straight line; give examples of functions that are not linear.</td></tr>
+              <tr><td>8.F.B.4</td><td>Construct a function to model a linear relationship between two quantities. Determine the rate of change and initial value of the function from a description of a relationship or from two (x, y) values, including reading these from a table or from a graph.</td></tr>
+              <tr><td>8.F.B.5</td><td>Describe qualitatively the functional relationship between two quantities by analyzing a graph (e.g., where the function is increasing or decreasing, linear or nonlinear). Sketch a graph that exhibits the qualitative features of a function that has been described verbally.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 9 · Learning Objectives</span>
+          <div class="card-headline">Learning Objectives</div>
+          <div class="card-body">
+            By the end of Unit 3, students will be able to:
+            <ol start="18">
+              <li>Define a function and determine whether a relation is a function using mapping diagrams, tables, and the vertical line test</li>
+              <li>Represent a function in four ways: equation, table, graph, and verbal description</li>
+              <li>Compare two functions given in different representations and determine which has a greater rate of change</li>
+              <li>Identify whether a function is linear or nonlinear from any representation</li>
+              <li>Construct a function equation to model a linear relationship from a table, graph, or description</li>
+              <li>Identify and interpret the rate of change and initial value of a linear function in context</li>
+              <li>Analyze a graph qualitatively: identify increasing/decreasing intervals, maximum/minimum, linear/nonlinear sections</li>
+              <li>Sketch a graph that tells the story of a described real-world situation</li>
+            </ol>
+          </div>
+          <div class="card-index">Card 4 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 9 · YouTube Video Resources</span>
+          <div class="card-headline">YouTube Video Resources</div>
+          <div class="card-body">
+            <ul>
+              <li>🎪 Functions Intro: The Vending Machine — Math Antics — Best conceptual intro — the vending machine analogy is unforgettable (8 min)</li>
+              <li>📊 Linear vs. Nonlinear Functions — Khan Academy — Graph-based comparison with practice problems (7 min)</li>
+              <li>🌊 Interpreting Graphs in Context — GreeneMath — Reading and sketching qualitative graphs (10 min)</li>
+              <li>🏎️ Rate of Change in Real Life — Mathispower4u — Temperature, speed, population — multiple compelling contexts (12 min)</li>
+              <li>🤖 What is a Function? Mapping & Vertical Line Test — Khan Academy — Clear explanation of domain, range, and the one-output rule (9 min)</li>
+              <li>📉 Comparing Functions in Different Representations — Khan Academy — Side-by-side comparison of table vs. equation vs. graph (8 min)</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 5 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 9 · STAR Project</span>
+          <div class="card-headline">THE FUNCTION MACHINE GAME SHOW</div>
+          <div class="card-body">
+            Student groups of 3–4 design a "Function Machine Game Show" where they create 4 original functions (one linear from equation, one from table, one nonlinear, one described verbally), represent each in all four forms, and challenge classmates to identify the rule and compare rates of change. Groups then run their game show segment live in class.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.F.A.1, 8.F.A.2, 8.F.A.3, 8.F.B.4, 8.F.B.5<br>
+              <strong>Duration:</strong> 4 class periods<br>
+              <strong>Materials:</strong> large chart paper, markers, index cards for input/output, optional: Desmos or Geogebra<br>
+              <strong>Deliverables:</strong> all 4 functions in all 4 representations; one graph-story sketch with interpretation<br>
+              <strong>Game show format:</strong> host reveals one representation at a time; opposing team earns points for each correct identification<br>
+              <strong>Extension:</strong> create a piecewise function with a real-world story (e.g., step pricing, ride-share surge)
+            </div>
+          </div>
+          <div class="card-index">Card 6 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 9 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (18 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1–2</td><td>What Is a Function?</td><td>Definition; input/output; mapping diagrams; vertical line test; function notation f(x)</td><td>Vending machine activity; relation sort (function/not function)</td></tr>
+              <tr><td>3–4</td><td>Representing Functions</td><td>Equations, tables, graphs, verbal descriptions; converting between all four representations</td><td>Four-corner representation activity; Desmos exploration</td></tr>
+              <tr><td>5–7</td><td>Linear Functions Review & Extend</td><td>Slope as rate of change; y-intercept as initial value; constructing equations from context</td><td>Real-world modeling: cell phone data usage, candle burning</td></tr>
+              <tr><td>8–9</td><td>Comparing Functions</td><td>Comparing rate of change and initial value from different representations; which is greater?</td><td>Card sort: matching functions across representations; partner compare</td></tr>
+              <tr><td>10–11</td><td>Linear vs. Nonlinear Functions</td><td>Identifying from table (constant vs. variable rate of change); quadratic and exponential intro</td><td>Toothpick pattern investigation; graph shape exploration</td></tr>
+              <tr><td>12–14</td><td>Interpreting & Sketching Graphs</td><td>Increasing/decreasing; max/min; linear vs. nonlinear sections; graph-story matching</td><td>Graph story relay; sketch the story activity</td></tr>
+              <tr><td>15–17</td><td>Function Machine Project</td><td>Synthesis: all four representations; nonlinear examples; qualitative analysis</td><td>Function Machine Game Show project work and presentations</td></tr>
+              <tr><td>18</td><td>Unit Assessment</td><td>Synthesis of all Unit 3 standards</td><td>Unit test</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 7 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 9 · Key Vocabulary</span>
+          <div class="card-headline">Key Vocabulary</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Term</th><th>Definition</th></tr>
+              <tr><td>Function</td><td>A rule that assigns each input (x-value) exactly one output (y-value); no x-value maps to two different y-values</td></tr>
+              <tr><td>Domain</td><td>The set of all possible input values (x-values) of a function</td></tr>
+              <tr><td>Range</td><td>The set of all possible output values (y-values) of a function</td></tr>
+              <tr><td>Vertical line test</td><td>A visual test: if any vertical line passes through a graph more than once, the graph is NOT a function</td></tr>
+              <tr><td>Rate of change</td><td>How much the output changes per unit change in input; slope for linear functions</td></tr>
+              <tr><td>Initial value</td><td>The output when the input is zero; the y-intercept in context (starting amount, base cost, etc.)</td></tr>
+              <tr><td>Linear function</td><td>A function whose graph is a straight line; has a constant rate of change; equation: y = mx + b</td></tr>
+              <tr><td>Nonlinear function</td><td>A function whose graph is curved; rate of change is NOT constant; examples: quadratic, exponential, absolute value</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 8 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 9 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Support and extension strategies:
+            <ul>
+              <li>Use physical input/output function machines (a student hands a number to another, who secretly applies the rule and hands back the output)</li>
+              <li>Provide a four-square graphic organizer template for representing functions in all four forms</li>
+              <li>Anchor chart: Linear vs. Nonlinear clues (table: constant differences vs. not; graph: straight vs. curved)</li>
+              <li>Extension: explore quadratic functions y = x²; compare to linear; introduce the concept of exponential growth</li>
+              <li>Extension: research how functions are used in computer programming (coding functions have the same input-one-output logic)</li>
+              <li>Cross-curricular: science class data tables are almost always functions — connect graphing in both classes</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 9 / 9</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 4: GEOMETRY -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u4" data-domain="u4">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 4</span>
+    <span class="domain-title">Geometry (22 Lessons)</span>
+    <span class="domain-count">11 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 4.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u4" data-domain="u4" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">4.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">11 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 11 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            The geometry unit is one of the most visually rich and intellectually satisfying in 8th grade mathematics. Students explore transformations — translations, reflections, rotations, dilations — and discover the properties that are preserved or changed by each. They encounter the Pythagorean Theorem, perhaps the most famous result in all of mathematics, prove it, and apply it in two and three dimensions. The unit concludes with volume of cylinders, cones, and spheres, connecting geometric formulas to real-world design and measurement.
+          </div>
+          <div class="card-index">Card 1 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 11 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>How does moving, flipping, or rotating a shape change what is the same and what is different about it?</li>
+              <li>Why is a² + b² = c² always true for right triangles — and how can we prove it?</li>
+              <li>How are parallel lines cut by a transversal connected to similar and congruent triangles?</li>
+              <li>How do the formulas for volume allow us to design and measure the real world?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 11 · CCSS Standards</span>
+          <div class="card-headline">CCSS Standards</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Standard</th><th>Description</th></tr>
+              <tr><td>8.G.A.1</td><td>Verify experimentally the properties of rotations, reflections, and translations: a) lines are taken to lines and line segments to line segments of the same length; b) angles are taken to angles of the same measure; c) parallel lines are taken to parallel lines.</td></tr>
+              <tr><td>8.G.A.2</td><td>Understand that a two-dimensional figure is congruent to another if the second can be obtained from the first by a sequence of rotations, reflections, and translations. Describe the sequence.</td></tr>
+              <tr><td>8.G.A.3</td><td>Describe the effect of dilations, translations, rotations, and reflections on two-dimensional figures using coordinates.</td></tr>
+              <tr><td>8.G.A.4</td><td>Understand that a two-dimensional figure is similar to another if the second can be obtained from the first by a sequence of rotations, reflections, translations, and dilations.</td></tr>
+              <tr><td>8.G.A.5</td><td>Use informal arguments to establish facts about the angle sum and exterior angle of triangles, about the angles created when parallel lines are cut by a transversal, and the angle-angle criterion for similarity of triangles.</td></tr>
+              <tr><td>8.G.B.6</td><td>Explain a proof of the Pythagorean Theorem and its converse.</td></tr>
+              <tr><td>8.G.B.7</td><td>Apply the Pythagorean Theorem to determine unknown side lengths in right triangles in real-world and mathematical problems in two and three dimensions.</td></tr>
+              <tr><td>8.G.B.8</td><td>Apply the Pythagorean Theorem to find the distance between two points in a coordinate system.</td></tr>
+              <tr><td>8.G.C.9</td><td>Know the formulas for the volumes of cones, cylinders, and spheres and use them to solve real-world and mathematical problems.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 11 · Learning Objectives</span>
+          <div class="card-headline">Learning Objectives</div>
+          <div class="card-body">
+            By the end of Unit 4, students will be able to:
+            <ol start="26">
+              <li>Perform and describe translations, reflections, rotations, and dilations on the coordinate plane</li>
+              <li>Identify congruent figures and describe the transformation sequence connecting them</li>
+              <li>Identify similar figures and describe the transformation sequence including dilation</li>
+              <li>Apply angle relationships: parallel lines/transversal, triangle angle sum, exterior angles, AA similarity</li>
+              <li>Explain at least one visual proof of the Pythagorean Theorem</li>
+              <li>Apply the Pythagorean Theorem to find missing side lengths in 2D and 3D problems</li>
+              <li>Use the Pythagorean Theorem to find the distance between two points on a coordinate grid</li>
+              <li>Calculate volume of cylinders, cones, and spheres using correct formulas</li>
+            </ol>
+          </div>
+          <div class="card-index">Card 4 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 11 · YouTube Video Resources</span>
+          <div class="card-headline">YouTube Video Resources</div>
+          <div class="card-body">
+            <ul>
+              <li>📱 Transformations Overview — Math Antics — Translations, reflections, rotations, and dilations clearly explained (12 min)</li>
+              <li>🎨 Congruence and Similarity — Khan Academy — How transformations define congruence and similarity (10 min)</li>
+              <li>🔥 Visual Proof of Pythagorean Theorem — 3Blue1Brown — The most beautiful animated proof; guaranteed to create 'wow' moments (5 min)</li>
+              <li>🏗️ Pythagorean Theorem in Architecture and Construction — TED-Ed — Real engineering applications — perfect unit hook (5 min)</li>
+              <li>📍 Distance Formula from Pythagorean Theorem — Khan Academy — Connects coordinate geometry and the theorem naturally (8 min)</li>
+              <li>🍹 Volume of Cylinders, Cones, and Spheres — Math Antics — Formula derivation and worked examples for all three solids (13 min)</li>
+              <li>🎵 Pythagorean Theorem Song — NUMBEROCK — Catchy memory hook — students will have this in their heads (3 min)</li>
+              <li>🕴️ Parallel Lines and Transversals — Angles — Khan Academy — Corresponding, alternate interior, co-interior angles (11 min)</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 5 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 11 · STAR Projects</span>
+          <div class="card-headline">STAR Projects</div>
+          <div class="card-body">
+            <strong>PROJECT A: TRANSFORMATION ART GALLERY (Lessons 1-10)</strong><br>
+            Students create an original piece of geometric art that demonstrates all four transformation types. Starting with a simple polygon, they apply a translation, reflection, rotation, and dilation to create a tiled or symmetric design. Each transformation must be documented with coordinate notation on graph paper. Final products are mounted and displayed as a class art gallery.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.G.A.1, 8.G.A.2, 8.G.A.3, 8.G.A.4<br>
+              <strong>Duration:</strong> 3 class periods<br>
+              <strong>Materials:</strong> large graph paper (or Geogebra), colored pencils<br>
+              <strong>Display:</strong> class hallway gallery with transformation documentation cards<br>
+              <strong>Extension:</strong> use Desmos or Geogebra to create a digital animated version
+            </div>
+            <br>
+            <strong>PROJECT B: DREAM BEDROOM DESIGN (Lessons 11-18)</strong><br>
+            Students receive a 'client brief' for a fictional client's dream bedroom. They must: create a scale floor plan, use the Pythagorean Theorem to calculate all diagonal measurements, verify at least two right angles using the converse, calculate the distance between two points on the coordinate plan (e.g., bed to window), determine whether furniture fits. Final product: a design portfolio with all calculations clearly shown.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.G.B.6, 8.G.B.7, 8.G.B.8 and review of 8.EE.A.2<br>
+              <strong>Duration:</strong> 4 class periods<br>
+              <strong>Materials:</strong> graph paper, ruler, colored pencils; optional: Floorplanner.com (free browser tool)<br>
+              <strong>Extension:</strong> find the length of the space diagonal (longest diagonal through the 3D room)<br>
+              <strong>Cross-curricular:</strong> architecture, interior design, spatial reasoning
+            </div>
+          </div>
+          <div class="card-index">Card 6 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 11 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (22 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1–3</td><td>Translations & Reflections</td><td>Coordinate rules for translations (x+a, y+b); reflections across x-axis, y-axis, y=x</td><td>Coordinate grid art; patty paper folding; Desmos transformations</td></tr>
+              <tr><td>4–5</td><td>Rotations</td><td>90°, 180°, 270° rotations about the origin; coordinate rules; center of rotation</td><td>Rotation station activity; protractors + tracing paper</td></tr>
+              <tr><td>6–7</td><td>Dilations</td><td>Scale factor; center of dilation; coordinate rule (kx, ky); enlargement vs. reduction</td><td>Similar figure investigation; dilation on coordinate plane</td></tr>
+              <tr><td>8–10</td><td>Congruence, Similarity & Art Project</td><td>Transformation sequences; congruent vs. similar; Art Gallery project</td><td>Transformation Art Gallery project work sessions</td></tr>
+              <tr><td>11–12</td><td>Parallel Lines & Transversals</td><td>Corresponding, alternate interior, co-interior angles; angle relationships; supplementary/equal</td><td>Angle hunt in photos; protractor measurement station</td></tr>
+              <tr><td>13–14</td><td>Triangle Angle Relationships</td><td>Triangle angle sum = 180°; exterior angle theorem; AA similarity criterion</td><td>Proof of angle sum via parallel lines; similar triangle investigation</td></tr>
+              <tr><td>15–16</td><td>Pythagorean Theorem — Proof & Intro</td><td>Visual area proofs; identifying legs and hypotenuse; Pythagorean triples</td><td>3Blue1Brown proof video; tile area proof activity</td></tr>
+              <tr><td>17–19</td><td>Applying Pythagorean Theorem</td><td>Missing sides in 2D; 3D problems (space diagonal); real-world applications</td><td>Dream Bedroom project work; 3D problem stations</td></tr>
+              <tr><td>20</td><td>Distance on Coordinate Plane</td><td>Derive distance formula from Pythagorean Theorem; apply to coordinate geometry</td><td>Coordinate city distance challenge</td></tr>
+              <tr><td>21</td><td>Volume: Cylinders, Cones, Spheres</td><td>Formula derivation; V = πr²h; V = (1/3)πr²h; V = (4/3)πr³; real-world problems</td><td>Design a can challenge; compare cylinder vs. cone volumes</td></tr>
+              <tr><td>22</td><td>Unit Assessment + Presentations</td><td>Review and synthesis of all Unit 4 standards</td><td>Unit test; Dream Bedroom portfolio presentations</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 7 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 11 · Key Vocabulary</span>
+          <div class="card-headline">Key Vocabulary</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Term</th><th>Definition</th></tr>
+              <tr><td>Translation</td><td>Sliding a figure along a vector without rotating or flipping it; every point moves the same distance and direction</td></tr>
+              <tr><td>Reflection</td><td>Flipping a figure across a line of reflection; creates a mirror image; distance from line is preserved</td></tr>
+              <tr><td>Rotation</td><td>Turning a figure about a fixed point (center of rotation) by a given angle</td></tr>
+              <tr><td>Dilation</td><td>Resizing a figure by a scale factor from a center of dilation; angles preserved, lengths multiplied by scale factor</td></tr>
+              <tr><td>Congruent</td><td>Figures with the same shape AND same size; connected by rigid transformations (translations, reflections, rotations only)</td></tr>
+              <tr><td>Similar</td><td>Figures with the same shape but different size; connected by rigid transformations plus dilation</td></tr>
+              <tr><td>Pythagorean Theorem</td><td>In a right triangle, a² + b² = c² where c is the hypotenuse (longest side, opposite the right angle)</td></tr>
+              <tr><td>Hypotenuse</td><td>The side of a right triangle opposite the right angle; always the longest side; c in the Pythagorean Theorem</td></tr>
+              <tr><td>Transversal</td><td>A line that intersects two or more parallel lines; creates pairs of congruent and supplementary angle relationships</td></tr>
+              <tr><td>Scale factor</td><td>The ratio of corresponding lengths in similar figures; used in dilations to determine how much larger or smaller</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 8 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 11 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Support and extension strategies:
+            <ul>
+              <li>Provide coordinate plane templates pre-labeled for transformation tasks</li>
+              <li>Use physical manipulatives: tracing paper for reflections and rotations; mirrors for reflections</li>
+              <li>Create a Pythagorean Theorem anchor chart with the visual square proof permanently displayed</li>
+              <li>Provide a Pythagorean Triples reference (3-4-5, 5-12-13, 8-15-17) for pattern recognition</li>
+              <li>Extension: prove the converse of the Pythagorean Theorem; research non-Euclidean geometry</li>
+              <li>Extension: explore similar triangles in trigonometry ratios (preview of high school trig)</li>
+              <li>Mathigon Polypad (mathigon.org/polypad) — free virtual manipulatives ideal for transformations</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 9 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 10 of 11 · Project A Rubric</span>
+          <div class="card-headline">Project Rubric — All STAR Projects</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Category</th><th>4 — Exceeds</th><th>3 — Meets</th><th>2 — Approaching</th><th>1 — Beginning</th></tr>
+              <tr><td>Mathematical Accuracy</td><td>All calculations correct; appropriate use of notation and units</td><td>Most calculations correct; minor errors</td><td>Some errors; some standards addressed correctly</td><td>Significant errors; standards not demonstrated</td></tr>
+              <tr><td>Problem Solving Process</td><td>Clear, logical approach; multiple strategies shown when appropriate; work organized</td><td>Logical approach; work mostly shown; organized</td><td>Some work shown; approach partially clear</td><td>Minimal work shown; approach unclear</td></tr>
+              <tr><td>Mathematical Communication</td><td>Ideas explained precisely in words; visuals support reasoning; technical vocabulary used correctly</td><td>Ideas mostly clear; some vocabulary; visuals present</td><td>Communication partial; vocabulary inconsistent</td><td>Explanation unclear; vocabulary absent</td></tr>
+              <tr><td>Presentation Quality</td><td>Professional, complete, visually clear; addresses audience confidently; answers questions</td><td>Mostly complete; some visual clarity; engages audience</td><td>Partially complete; some presentation elements</td><td>Incomplete; minimal audience engagement</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 10 / 11</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 11 of 11 · Grading Structure</span>
+          <div class="card-headline">Grading Structure</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Component</th><th>Weight & Notes</th></tr>
+              <tr><td>Unit Tests (6)</td><td>40% — Each test equally weighted; retake policy applies; lowest test score may be replaced by Capstone project score</td></tr>
+              <tr><td>STAR Projects (6)</td><td>30% — Each project scored on the 4-category rubric above; given on Day 1 — no surprise rubrics</td></tr>
+              <tr><td>Weekly Skills Quizzes</td><td>15% — Lowest two quiz scores dropped at end of semester; builds in grace for off days</td></tr>
+              <tr><td>Daily Practice / Participation</td><td>10% — Completion-based (not correctness); includes exit tickets, warm-ups, and practice work</td></tr>
+              <tr><td>Math Journal</td><td>5% — Weekly reflection prompts; graded on thoughtfulness, not correctness</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 11 / 11</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 5: STATISTICS & PROBABILITY -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u5" data-domain="u5">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 5</span>
+    <span class="domain-title">Statistics & Probability (14 Lessons)</span>
+    <span class="domain-count">9 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 5.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u5" data-domain="u5" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">5.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">9 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 9 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            Statistics and probability move math from the abstract to the immediately relevant. Students learn to collect, display, and interpret bivariate data — data involving two variables — through scatter plots and two-way tables. They find and interpret lines of best fit, distinguish between linear and non-linear associations, and reason about patterns, outliers, and the crucial difference between correlation and causation. These are skills students will use for the rest of their lives.
+          </div>
+          <div class="card-index">Card 1 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 9 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>How can we see and describe the relationship between two variables visually and mathematically?</li>
+              <li>When two things seem related, does that mean one causes the other?</li>
+              <li>How do we use data to make predictions — and how confident should we be in those predictions?</li>
+              <li>What can a two-way table tell us about patterns in categorical data?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 9 · CCSS Standards</span>
+          <div class="card-headline">CCSS Standards</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Standard</th><th>Description</th></tr>
+              <tr><td>8.SP.A.1</td><td>Construct and interpret scatter plots for bivariate measurement data to investigate patterns of association between two quantities. Describe patterns such as clustering, outliers, positive or negative association, linear association, and nonlinear association.</td></tr>
+              <tr><td>8.SP.A.2</td><td>Know that straight lines are widely used to model relationships between two quantitative variables. For scatter plots that suggest a linear association, informally fit a straight line, and informally assess the model fit by judging the closeness of the data points to the line.</td></tr>
+              <tr><td>8.SP.A.3</td><td>Use the equation of a linear model to solve problems in the context of bivariate measurement data, interpreting the slope and intercept. For example, in a linear model for a biology experiment, interpret a slope of 1.5 cm/hr as meaning that an additional hour of sunlight each day is associated with an additional 1.5 cm in mature plant height.</td></tr>
+              <tr><td>8.SP.A.4</td><td>Understand that patterns of association can also be seen in bivariate categorical data by displaying frequencies and relative frequencies in a two-way table. Construct and interpret a two-way table summarizing data on two categorical variables collected from the same subjects.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 9 · Learning Objectives</span>
+          <div class="card-headline">Learning Objectives</div>
+          <div class="card-body">
+            By the end of Unit 5, students will be able to:
+            <ol start="34">
+              <li>Construct a scatter plot from a bivariate data set and identify the type of association</li>
+              <li>Describe scatter plot patterns: clustering, outliers, positive/negative/no association, linear/nonlinear</li>
+              <li>Informally draw a line of best fit that minimizes overall distance from data points</li>
+              <li>Write the equation of a line of best fit and use it to make predictions</li>
+              <li>Interpret slope and y-intercept of a linear model in the context of the data</li>
+              <li>Explain the difference between correlation and causation with real-world examples</li>
+              <li>Construct and read a two-way table for bivariate categorical data</li>
+              <li>Calculate and interpret relative frequencies from a two-way table</li>
+            </ol>
+          </div>
+          <div class="card-index">Card 4 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 9 · YouTube Video Resources</span>
+          <div class="card-headline">YouTube Video Resources</div>
+          <div class="card-body">
+            <ul>
+              <li>📍 Scatter Plots: How to Read and Create — Khan Academy — Complete intro to scatter plots with real data examples (10 min)</li>
+              <li>📏 Line of Best Fit — CrashCourse Statistics — Engaging, humor-infused intro to linear regression concepts (11 min)</li>
+              <li>🤦 Correlation Does NOT Equal Causation — TED-Ed — Brilliant examples of spurious correlations (5 min) — always gets a reaction</li>
+              <li>📊 Two-Way Tables — Khan Academy — Categorical data, relative frequency, interpretation (9 min)</li>
+              <li>📡 Real Statistics: Sports Analytics — ESPN/YouTube — How baseball/basketball teams use statistics — motivating hook (8 min)</li>
+              <li>🌍 Spurious Correlations Compilation — Tyler Vigen — Hilarious and memorable false correlations (4 min) — use for causation lesson</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 5 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 9 · STAR Project</span>
+          <div class="card-headline">THE DATA DETECTIVES INVESTIGATION</div>
+          <div class="card-body">
+            Student pairs choose a real-world question involving two variables (sleep vs. grades, temperature vs. ice cream sales, screen time vs. test scores, shoe size vs. height). They collect or access real data (at least 15 data points), create a scatter plot, draw a line of best fit, write its equation, interpret slope and y-intercept in context, make two predictions, and present a 1-page Data Report distinguishing what their data shows from what it doesn't prove.
+            <div class="highlight">
+              <strong>Standards:</strong> 8.SP.A.1, 8.SP.A.2, 8.SP.A.3<br>
+              <strong>Duration:</strong> 4 class periods<br>
+              <strong>Data sources:</strong> class survey, Census at School (censusatschool.org), GAPMINDER (gapminder.org), Kaggle public datasets<br>
+              <strong>Deliverables:</strong> scatter plot (hand-drawn or Desmos), equation of line of best fit, interpretation paragraph, two predictions with confidence statements<br>
+              <strong>Key requirement:</strong> a paragraph distinguishing correlation from causation for their chosen variables<br>
+              <strong>Extension:</strong> use Desmos regression tool; compare their hand-drawn line to the mathematical line of best fit
+            </div>
+          </div>
+          <div class="card-index">Card 6 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 9 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (14 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1–2</td><td>Introduction to Bivariate Data</td><td>What is bivariate data? Scatter plot construction and reading; association vocabulary</td><td>Class data collection (height vs. arm span); hand-draw scatter plot</td></tr>
+              <tr><td>3–4</td><td>Describing Scatter Plots</td><td>Positive/negative/no association; linear/nonlinear; strength; clusters and outliers</td><td>Association strength sort; outlier investigation with real data</td></tr>
+              <tr><td>5–7</td><td>Line of Best Fit</td><td>Drawing lines of best fit by eye; assessing fit quality; writing the equation</td><td>Spaghetti line of best fit activity; Desmos comparison</td></tr>
+              <tr><td>8–9</td><td>Interpreting Linear Models</td><td>Slope in context ('for each additional...'); y-intercept in context; making predictions</td><td>Sports analytics context; interpret slope/intercept in pairs</td></tr>
+              <tr><td>10</td><td>Correlation vs. Causation</td><td>Definition of each; identifying confounding variables; spurious correlations examples</td><td>Tyler Vigen spurious correlations gallery; class debate</td></tr>
+              <tr><td>11–12</td><td>Two-Way Tables</td><td>Constructing two-way tables; marginal frequencies; relative frequencies; interpreting patterns</td><td>Class survey → two-way table; gender vs. sport preference</td></tr>
+              <tr><td>13</td><td>Data Detectives Project</td><td>Project work session: data collection, scatter plot, equation, interpretation</td><td>Partner project work; peer review of scatter plots</td></tr>
+              <tr><td>14</td><td>Unit Assessment + Presentations</td><td>Synthesis of all Unit 5 standards</td><td>Unit test; Data Detectives presentations</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 7 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 9 · Key Vocabulary</span>
+          <div class="card-headline">Key Vocabulary</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Term</th><th>Definition</th></tr>
+              <tr><td>Bivariate data</td><td>Data that involves two variables measured for the same subjects; plotted on a scatter plot</td></tr>
+              <tr><td>Scatter plot</td><td>A graph with individual data points plotted as ordered pairs; used to explore relationships between two quantitative variables</td></tr>
+              <tr><td>Association</td><td>A pattern or relationship between two variables; can be positive, negative, or none; linear or nonlinear</td></tr>
+              <tr><td>Positive association</td><td>As one variable increases, the other tends to increase; points trend upward from left to right</td></tr>
+              <tr><td>Negative association</td><td>As one variable increases, the other tends to decrease; points trend downward from left to right</td></tr>
+              <tr><td>Line of best fit</td><td>A line drawn through a scatter plot that best represents the trend in the data; minimizes overall distance from points</td></tr>
+              <tr><td>Outlier</td><td>A data point that falls far from the overall pattern; may be an error or a genuinely unusual case</td></tr>
+              <tr><td>Correlation</td><td>A statistical relationship between two variables — they tend to change together</td></tr>
+              <tr><td>Causation</td><td>One variable directly causes a change in another; requires controlled experimentation, not just correlation</td></tr>
+              <tr><td>Two-way table</td><td>A table that displays frequencies for two categorical variables simultaneously; rows = one variable, columns = another</td></tr>
+              <tr><td>Relative frequency</td><td>The proportion or percentage of observations in a category; relative frequency = count ÷ total</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 8 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 9 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Support and extension strategies:
+            <ul>
+              <li>Provide pre-made scatter plots for students who struggle with plotting; focus instruction on interpretation</li>
+              <li>Correlation strength anchor chart: strong/moderate/weak with example scatter plots for visual reference</li>
+              <li>Use engaging real data: NBA player stats, student survey data, environmental data — relevance drives engagement</li>
+              <li>Extension: explore the mathematical line of best fit using Desmos regression (y1~mx1+b notation)</li>
+              <li>Extension: research how data scientists and epidemiologists establish causation (randomized controlled trials)</li>
+              <li>Real-world career connection: data analyst, sports statistician, epidemiologist, marketing researcher</li>
+              <li>Gapminder (gapminder.org) — free, interactive, real global development data; ideal for scatter plot exploration</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 9 / 9</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIT 6: REVIEW & PROBLEM SOLVING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="domain-section u6" data-domain="u6">
+  <div class="domain-header" onclick="toggleDomain(this.parentElement)">
+    <span class="domain-badge">Unit 6</span>
+    <span class="domain-title">Review & Problem Solving (11 Lessons)</span>
+    <span class="domain-count">9 Cards</span>
+    <span class="domain-chevron">▼</span>
+  </div>
+  <div class="domain-lessons">
+
+    <!-- LESSON 6.0 - UNIT OVERVIEW -->
+    <div class="lesson-card u6" data-domain="u6" data-title="Unit Overview">
+      <div class="lesson-header" onclick="toggleLesson(this.parentElement)">
+        <div class="lesson-num">6.0</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Unit Overview</div>
+          <div class="lesson-meta"><span class="card-count">9 cards</span></div>
+        </div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+      <div class="cards-panel" data-current="0">
+        <div class="card-content">
+          <span class="card-tag">Card 1 of 9 · Overview</span>
+          <div class="card-headline">Unit Overview</div>
+          <div class="card-body">
+            The final unit of the year is not just test prep — it is an opportunity for students to see 8th grade math as a unified whole rather than a collection of separate topics. Cross-domain problem solving reveals how the Real Number System connects to geometry, how functions illuminate statistical patterns, how equations model every domain. The capstone project is the culminating demonstration of mathematical identity: students choose their own real-world question and apply whatever mathematics they need to answer it.
+          </div>
+          <div class="card-index">Card 1 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 2 of 9 · Essential Questions</span>
+          <div class="card-headline">Essential Questions</div>
+          <div class="card-body">
+            <ul>
+              <li>How do the six units of 8th grade math connect to each other?</li>
+              <li>Which mathematical tools are most useful for different kinds of real-world problems?</li>
+              <li>What does it mean to think like a mathematician — not just do math?</li>
+              <li>What questions about my own world can I answer with the mathematics I now know?</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 2 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 3 of 9 · Unit Structure</span>
+          <div class="card-headline">Unit Structure</div>
+          <div class="card-body">
+            Unit 6 is organized in three phases: a structured spiral review phase where students revisit key standards from all five previous units; a cross-domain problem solving phase where multi-step problems deliberately blend content from two or more domains; and a capstone project phase where students work independently or in pairs on a self-chosen real-world mathematical investigation.
+            <table>
+              <tr><th>Phase</th><th>Focus & Activities</th></tr>
+              <tr><td>Phase 1 (Days 1–4): Spiral Review</td><td>Targeted review of highest-priority standards from all five units; diagnostic assessment to identify gaps; small-group reteaching stations</td></tr>
+              <tr><td>Phase 2 (Days 5–7): Cross-Domain Problems</td><td>Multi-step problems blending content from 2+ domains; discussion-based problem solving; 'Which tool should I use?' metacognition practice</td></tr>
+              <tr><td>Phase 3 (Days 8–11): Capstone Project</td><td>Student-chosen real-world investigation; mathematical write-up; class presentations and reflection</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 3 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 4 of 9 · STAR Project</span>
+          <div class="card-headline">THE CAPSTONE: MATH IN MY WORLD</div>
+          <div class="card-body">
+            Each student (or pair) identifies a real-world question they genuinely care about that can be answered with 8th grade mathematics. They collect or find real data, apply at least two distinct mathematical tools from two different units, and produce a 2-page Mathematical Investigation Report. The report includes the question, the data/approach, the mathematics (clearly shown), the answer with appropriate caveats, and a reflection on what was surprising or what they still want to know.
+            <div class="highlight">
+              <strong>Standards:</strong> All 8th grade CCSS — students choose which apply to their investigation<br>
+              <strong>Duration:</strong> 4 class periods + independent work time<br>
+              <strong>Example investigations:</strong> 'How has the temperature in our city changed over 10 years?' (scatter plot, line of best fit, slope as rate of change) | 'Is our school cafeteria food worth the cost?' (systems, proportional reasoning) | 'Can I build a bookshelf that fits in my room?' (Pythagorean theorem, volume, scale)<br>
+              <strong>Deliverables:</strong> Investigation Report (2 pages minimum), all work shown, visual display or slides<br>
+              <strong>Presentation:</strong> 3–4 minute presentation to class with time for one question<br>
+              <strong>Reflection component:</strong> 'What mathematics did I use? What was hardest? What would I investigate next?'
+            </div>
+          </div>
+          <div class="card-index">Card 4 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 5 of 9 · Lesson Sequence</span>
+          <div class="card-headline">Lesson Sequence (11 Days)</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Days</th><th>Topic</th><th>Key Skills & Concepts</th><th>Suggested Activities</th></tr>
+              <tr><td>1</td><td>Year Review Diagnostic</td><td>Identify priority standards to revisit; celebrate growth since Unit 1</td><td>Year-in-review quiz; then look at Unit 1 pre-assessment for growth comparison</td></tr>
+              <tr><td>2–4</td><td>Spiral Review Stations</td><td>Rotating stations: one per unit domain; small-group reteaching for identified gaps</td><td>5 stations (15 min each): Number, Equations, Functions, Geometry, Statistics</td></tr>
+              <tr><td>5–6</td><td>Cross-Domain Problem Solving</td><td>Problems blending 2+ domains; discuss: which tools? why? multiple solution paths</td><td>Rich problem set; Socratic seminar on mathematical approaches</td></tr>
+              <tr><td>7</td><td>Mathematical Habits of Mind</td><td>Perseverance, precision, abstraction, pattern-seeking, argument — what makes a mathematician</td><td>Reflection on the year; growth mindset revisit; peer appreciation</td></tr>
+              <tr><td>8–11</td><td>Capstone Project</td><td>Student-driven investigation; teacher as coach and consultant; individual conferences</td><td>Capstone project work, peer feedback sessions, presentations</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 5 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 6 of 9 · Cross-Domain Problem Examples</span>
+          <div class="card-headline">Cross-Domain Problem Examples</div>
+          <div class="card-body">
+            These multi-step problems span two or more units and are ideal for Phase 2 discussion-based problem solving:
+            <table>
+              <tr><th>Domains Used</th><th>Problem Description</th></tr>
+              <tr><td>Units 1 + 4</td><td>A cell is 2.5 × 10⁻⁶ m in diameter. A right triangle has legs of 3.0 × 10⁻⁶ and 4.0 × 10⁻⁶ meters. Find the hypotenuse in scientific notation.</td></tr>
+              <tr><td>Units 2 + 5</td><td>A scatter plot of hours studied vs. test score has a linear association. The line of best fit passes through (2, 65) and (6, 85). Write the equation of the line, interpret slope, and predict the score for 10 hours.</td></tr>
+              <tr><td>Units 3 + 2</td><td>Two functions are given: f(x) = 3x - 4 and g represented by the table. Write g as an equation. Find x such that f(x) = g(x) — connect to systems of equations.</td></tr>
+              <tr><td>Units 4 + 3</td><td>A 12-foot ladder leans against a wall. As the base slides from 3 ft to 5 ft away, how does the height on the wall change? Is this change linear or nonlinear? Justify.</td></tr>
+              <tr><td>Units 2 + 4</td><td>A city block is 400 ft by 300 ft. A student walks diagonally. Another walks the perimeter to the same corner. Write an equation for each path's total distance as a function of the number of blocks walked.</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 6 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 7 of 9 · Differentiation Strategies</span>
+          <div class="card-headline">Differentiation Strategies</div>
+          <div class="card-body">
+            Supporting all learners in the final unit:
+            <ul>
+              <li>For students who need support: provide a 'Unit Review Toolkit' with one example and one formula per unit domain; use spiral review stations at differentiated levels</li>
+              <li>For advanced students: Capstone project should pursue a more complex investigation; consider entering local or national math competitions (MATHCOUNTS, AMC 8)</li>
+              <li>Cross-curricular Capstone topics: science fair data analysis, social studies (demographic data), PE (fitness data), economics (price trend analysis)</li>
+              <li>Celebrate ALL student work in a 'Math Showcase' — invite parents/families to final presentations</li>
+            </ul>
+          </div>
+          <div class="card-index">Card 7 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 8 of 9 · Assessment Philosophy</span>
+          <div class="card-headline">Assessment Philosophy</div>
+          <div class="card-body">
+            Assessment in this curriculum serves two purposes: to inform instruction (formative) and to document mastery (summative). The goal is never to catch students in failure but to create multiple opportunities to demonstrate what they know and to identify where they need support before that gap becomes permanent. A balanced assessment program includes daily, weekly, and unit-level data points — and treats all of them as information, not just judgment.
+          </div>
+          <div class="card-index">Card 8 / 9</div>
+        </div>
+        <div class="card-content" style="display:none">
+          <span class="card-tag">Card 9 of 9 · Formative Assessment Strategies</span>
+          <div class="card-headline">Formative Assessment Strategies</div>
+          <div class="card-body">
+            <table>
+              <tr><th>Strategy</th><th>Description & Implementation</th><th>Timing</th></tr>
+              <tr><td>Daily Exit Ticket</td><td>3–4 targeted problems on the day's standard; students record on half-sheet or digital form; teacher sorts into Got It / Almost / Not Yet</td><td>Last 5 minutes of class</td></tr>
+              <tr><td>Warm-Up Problem</td><td>Single problem reviewing previous day's content or previewing today's concept; teacher circulates and notes trends</td><td>First 5 minutes of class</td></tr>
+              <tr><td>Think-Pair-Share</td><td>Students solve independently, discuss with a partner, share with class; teacher listens for misconceptions</td><td>During instruction, 2–3× per lesson</td></tr>
+              <tr><td>Whiteboard Check</td><td>All students write their answer on mini whiteboard (or paper in sleeve) and hold up simultaneously; instant whole-class data</td><td>Mid-lesson quick checks</td></tr>
+              <tr><td>Weekly Skills Quiz</td><td>5–8 problems on current and recent standards; 1 spiral review question; 15 minutes; completed independently</td><td>Every Friday</td></tr>
+              <tr><td>Unit Pre-Assessment</td><td>Diagnostic given before each unit; identifies prerequisite gaps and readiness for extension; does NOT count toward grade</td><td>Day 1 of each unit</td></tr>
+              <tr><td>Checkpoint Assessment</td><td>Half-unit formative test (15–20 min); returned with targeted feedback before summative; time for re-teaching</td><td>Day 7–8 of each unit</td></tr>
+              <tr><td>Error Analysis Task</td><td>Students receive a worked problem with a deliberate mistake; find, explain, and correct it; builds metacognition</td><td>1–2 times per unit</td></tr>
+              <tr><td>Math Journal Prompt</td><td>Weekly written reflection: 'What was most confusing this week? What strategy worked best for you?'</td><td>Weekly, Friday</td></tr>
+            </table>
+          </div>
+          <div class="card-index">Card 9 / 9</div>
+        </div>
+        <div class="card-nav">
+          <div class="nav-dots"></div>
+          <div class="nav-arrows">
+            <button class="nav-btn" onclick="prevCard(this)" disabled>←</button>
+            <button class="nav-btn" onclick="nextCard(this)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<script>
+// ── TOGGLE DOMAIN ──────────────────────────────────────────
+function toggleDomain(section) {
+  section.classList.toggle('collapsed');
+}
+
+// ── TOGGLE LESSON ──────────────────────────────────────────
+function toggleLesson(card) {
+  const wasOpen = card.classList.contains('open');
+  // Close all open cards in same domain section
+  const section = card.closest('.domain-section');
+  section.querySelectorAll('.lesson-card.open').forEach(c => {
+    if (c !== card) c.classList.remove('open');
+  });
+  card.classList.toggle('open', !wasOpen);
+  if (!wasOpen) {
+    initCard(card);
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// ── INIT CARD ──────────────────────────────────────────────
+function initCard(card) {
+  const panel = card.querySelector('.cards-panel');
+  const contents = panel.querySelectorAll('.card-content');
+  const dotsContainer = panel.querySelector('.nav-dots');
+  const current = parseInt(panel.dataset.current) || 0;
+
+  // Build dots if not already
+  if (dotsContainer.children.length === 0) {
+    contents.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot' + (i === current ? ' active' : '') + (i < current ? ' visited' : '');
+      dot.onclick = () => goToCard(panel, i);
+      dotsContainer.appendChild(dot);
+    });
+  }
+  showCard(panel, current);
+}
+
+// ── SHOW CARD ──────────────────────────────────────────────
+function showCard(panel, index) {
+  const contents = panel.querySelectorAll('.card-content');
+  const dots = panel.querySelectorAll('.nav-dot');
+  const prevBtn = panel.querySelector('.nav-btn:first-child');
+  const nextBtn = panel.querySelector('.nav-btn:last-child');
+  const progressFill = panel.closest('.lesson-card').querySelector('.progress-fill');
+
+  contents.forEach((c, i) => c.style.display = i === index ? 'block' : 'none');
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+    if (i < index) d.classList.add('visited');
+  });
+
+  panel.dataset.current = index;
+  prevBtn.disabled = index === 0;
+  nextBtn.disabled = index === contents.length - 1;
+
+  // Update progress bar
+  const pct = contents.length === 1 ? 100 : Math.round(index / (contents.length - 1) * 100);
+  progressFill.style.width = pct + '%';
+}
+
+function prevCard(btn) {
+  const panel = btn.closest('.cards-panel');
+  const cur = parseInt(panel.dataset.current);
+  if (cur > 0) showCard(panel, cur - 1);
+}
+
+function nextCard(btn) {
+  const panel = btn.closest('.cards-panel');
+  const cur = parseInt(panel.dataset.current);
+  const total = panel.querySelectorAll('.card-content').length;
+  if (cur < total - 1) showCard(panel, cur + 1);
+}
+
+function goToCard(panel, index) {
+  showCard(panel, index);
+}
+
+// ── SEARCH ─────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  document.querySelectorAll('.lesson-card').forEach(card => {
+    const title = card.dataset.title || '';
+    const text = card.textContent || '';
+    const match = !q || title.toLowerCase().includes(q) || text.toLowerCase().includes(q);
+    card.style.display = match ? '' : 'none';
+  });
+  // Show/hide domain sections based on visible cards
+  document.querySelectorAll('.domain-section').forEach(section => {
+    const visible = section.querySelectorAll('.lesson-card:not([style*="display: none"])');
+    section.style.display = visible.length ? '' : 'none';
+    if (q && !section.classList.contains('collapsed')) {
+      // keep expanded during search
+    }
+  });
+});
+
+// ── DOMAIN FILTER ──────────────────────────────────────────
+function filterDomain(domain, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.getElementById('searchInput').value = '';
+
+  document.querySelectorAll('.domain-section').forEach(section => {
+    const match = domain === 'all' || section.dataset.domain === domain;
+    section.style.display = match ? '' : 'none';
+    if (match) section.classList.remove('collapsed');
+  });
+  document.querySelectorAll('.lesson-card').forEach(card => card.style.display = '');
+}
+
+// ── KEYBOARD NAV ───────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  const openCard = document.querySelector('.lesson-card.open');
+  if (!openCard) return;
+  const panel = openCard.querySelector('.cards-panel');
+  if (!panel) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    const cur = parseInt(panel.dataset.current);
+    const total = panel.querySelectorAll('.card-content').length;
+    if (cur < total - 1) showCard(panel, cur + 1);
+    e.preventDefault();
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    const cur = parseInt(panel.dataset.current);
+    if (cur > 0) showCard(panel, cur - 1);
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
